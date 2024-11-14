@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"log"
 
@@ -65,6 +66,13 @@ func (g *Game) Update() error {
 			if enemy.Y > g.player.Y {
 				enemy.Y -= 1
 			}
+		}
+	}
+
+	for _, potion := range g.potions {
+		if g.player.X > potion.X {
+			g.player.Health += potion.AmountHeal
+			fmt.Printf("Picked up potion! Health: %d\n", g.player.Health)
 		}
 	}
 
