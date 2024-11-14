@@ -1,6 +1,7 @@
 package main
 
 import (
+	"image"
 	"log"
 
 	"image/color"
@@ -21,7 +22,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{120, 180, 255, 255})
 
 	// draw player
-	screen.DrawImage(g.PlayerImage, &ebiten.DrawImageOptions{})
+	screen.DrawImage(g.PlayerImage.SubImage(image.Rect(0, 0, 16, 16)).(*ebiten.Image), &ebiten.DrawImageOptions{})
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
