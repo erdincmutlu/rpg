@@ -10,25 +10,29 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
+type Sprite struct {
+	Img *ebiten.Image
+	X   float64
+	Y   float64
+}
+
 type Game struct {
-	PlayerImage *ebiten.Image
-	X           float64
-	Y           float64
+	player *Sprite
 }
 
 func (g *Game) Update() error {
 	// react to key presses
 	if ebiten.IsKeyPressed(ebiten.KeyRight) {
-		g.X += 2
+		g.player.X += 2
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
-		g.X -= 2
+		g.player.X -= 2
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyUp) {
-		g.Y -= 2
+		g.player.Y -= 2
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyDown) {
-		g.Y += 2
+		g.player.Y += 2
 	}
 
 	return nil
@@ -39,9 +43,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	// draw player
 	opts := ebiten.DrawImageOptions{}
-	opts.GeoM.Translate(g.X, g.Y)
+	opts.GeoM.Translate(g.player.X, g.player.Y)
 
-	screen.DrawImage(g.PlayerImage.SubImage(image.Rect(0, 0, 16, 16)).(*ebiten.Image), &opts)
+	screen.DrawImage(g.player.Img.SubImage(image.Rect(0, 0, 16, 16)).(*ebiten.Image), &opts)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
@@ -57,7 +61,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err := ebiten.RunGame(&Game{PlayerImage: playerImg, X: 100, Y: 100}); err != nil {
+	if err := ebiten.RunGame(&Game{player: &Sprite{Img: playerImg, X: 50, Y: 50}}); err != nil {
 		log.Fatal(err)
 	}
 }
