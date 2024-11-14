@@ -16,6 +16,11 @@ type Sprite struct {
 	Y   float64
 }
 
+type Player struct {
+	*Sprite
+	Health uint
+}
+
 type Enemy struct {
 	*Sprite
 	FollowsPlayer bool
@@ -26,7 +31,7 @@ type Potion struct {
 	AmountHeal uint
 }
 type Game struct {
-	player  *Sprite
+	player  *Player
 	enemies []*Enemy
 	potions []*Potion
 }
@@ -135,10 +140,13 @@ func main() {
 	}
 
 	game := Game{
-		player: &Sprite{
-			Img: playerImg,
-			X:   50,
-			Y:   50,
+		player: &Player{
+			Sprite: &Sprite{
+				Img: playerImg,
+				X:   50,
+				Y:   50,
+			},
+			Health: 3,
 		},
 		enemies: []*Enemy{
 			{
