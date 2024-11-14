@@ -83,6 +83,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	skeletonImg, _, err := ebitenutil.NewImageFromFile("assets/images/skeleton.png")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	game := Game{
 		player: &Sprite{
 			Img: playerImg,
@@ -91,17 +96,17 @@ func main() {
 		},
 		sprites: []*Sprite{
 			{
-				Img: playerImg,
+				Img: skeletonImg,
 				X:   100,
 				Y:   100,
 			},
 			{
-				Img: playerImg,
+				Img: skeletonImg,
 				X:   150,
 				Y:   150,
 			},
 			{
-				Img: playerImg,
+				Img: skeletonImg,
 				X:   75,
 				Y:   75,
 			},
