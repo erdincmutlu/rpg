@@ -21,9 +21,14 @@ type Enemy struct {
 	FollowsPlayer bool
 }
 
+type Potion struct {
+	*Sprite
+	AmountHeal uint
+}
 type Game struct {
 	player  *Sprite
 	enemies []*Enemy
+	potions []*Potion
 }
 
 func (g *Game) Update() error {
@@ -89,6 +94,20 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 		opts.GeoM.Reset()
 	}
+
+	for _, potion := range g.potions {
+		opts.GeoM.Translate(potion.X, potion.Y)
+
+		screen.DrawImage(
+			potion.Img.SubImage(
+				image.Rect(0, 0, 16, 16),
+			).(*ebiten.Image),
+			&opts,
+		)
+
+		opts.GeoM.Reset()
+	}
+
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
@@ -106,6 +125,11 @@ func main() {
 	}
 
 	skeletonImg, _, err := ebitenutil.NewImageFromFile("assets/images/skeleton.png")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	potionImg, _, err := ebitenutil.NewImageFromFile("assets/images/potion.png")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -130,6 +154,16 @@ func main() {
 					Y: 50,
 				},
 				false,
+			},
+		},
+		potions: []*Potion{
+			{
+				&Sprite{
+					Img: potionImg,
+					X:   210,
+					Y:   100,
+				},
+				1,
 			},
 		},
 	}
