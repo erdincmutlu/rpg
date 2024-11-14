@@ -23,7 +23,7 @@ type Enemy struct {
 
 type Game struct {
 	player  *Sprite
-	sprites []*Enemy
+	enemies []*Enemy
 }
 
 func (g *Game) Update() error {
@@ -41,19 +41,19 @@ func (g *Game) Update() error {
 		g.player.Y += 2
 	}
 
-	for _, sprite := range g.sprites {
-		if sprite.FollowsPlayer {
-			if sprite.X < g.player.X {
-				sprite.X += 1
+	for _, enemy := range g.enemies {
+		if enemy.FollowsPlayer {
+			if enemy.X < g.player.X {
+				enemy.X += 1
 			}
-			if sprite.X > g.player.X {
-				sprite.X -= 1
+			if enemy.X > g.player.X {
+				enemy.X -= 1
 			}
-			if sprite.Y < g.player.Y {
-				sprite.Y += 1
+			if enemy.Y < g.player.Y {
+				enemy.Y += 1
 			}
-			if sprite.Y > g.player.Y {
-				sprite.Y -= 1
+			if enemy.Y > g.player.Y {
+				enemy.Y -= 1
 			}
 		}
 	}
@@ -77,11 +77,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	opts.GeoM.Reset()
 
-	for _, sprite := range g.sprites {
-		opts.GeoM.Translate(sprite.X, sprite.Y)
+	for _, enemy := range g.enemies {
+		opts.GeoM.Translate(enemy.X, enemy.Y)
 
 		screen.DrawImage(
-			sprite.Img.SubImage(
+			enemy.Img.SubImage(
 				image.Rect(0, 0, 16, 16),
 			).(*ebiten.Image),
 			&opts,
@@ -116,7 +116,7 @@ func main() {
 			X:   50,
 			Y:   50,
 		},
-		sprites: []*Enemy{
+		enemies: []*Enemy{
 			{
 				&Sprite{Img: skeletonImg,
 					X: 100,
@@ -129,7 +129,7 @@ func main() {
 					X: 150,
 					Y: 50,
 				},
-				true,
+				false,
 			},
 		},
 	}
