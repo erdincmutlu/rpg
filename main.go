@@ -11,15 +11,19 @@ import (
 )
 
 type Sprite struct {
-	Img           *ebiten.Image
-	X             float64
-	Y             float64
+	Img *ebiten.Image
+	X   float64
+	Y   float64
+}
+
+type Enemy struct {
+	*Sprite
 	FollowsPlayer bool
 }
 
 type Game struct {
 	player  *Sprite
-	sprites []*Sprite
+	sprites []*Enemy
 }
 
 func (g *Game) Update() error {
@@ -112,24 +116,20 @@ func main() {
 			X:   50,
 			Y:   50,
 		},
-		sprites: []*Sprite{
+		sprites: []*Enemy{
 			{
-				Img:           skeletonImg,
-				X:             100,
-				Y:             100,
-				FollowsPlayer: true,
+				&Sprite{Img: skeletonImg,
+					X: 100,
+					Y: 100,
+				},
+				true,
 			},
 			{
-				Img:           skeletonImg,
-				X:             150,
-				Y:             150,
-				FollowsPlayer: true,
-			},
-			{
-				Img:           skeletonImg,
-				X:             75,
-				Y:             75,
-				FollowsPlayer: false,
+				&Sprite{Img: skeletonImg,
+					X: 150,
+					Y: 50,
+				},
+				true,
 			},
 		},
 	}
