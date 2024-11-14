@@ -17,7 +17,8 @@ type Sprite struct {
 }
 
 type Game struct {
-	player *Sprite
+	player  *Sprite
+	sprites []*Sprite
 }
 
 func (g *Game) Update() error {
@@ -45,7 +46,27 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	opts := ebiten.DrawImageOptions{}
 	opts.GeoM.Translate(g.player.X, g.player.Y)
 
-	screen.DrawImage(g.player.Img.SubImage(image.Rect(0, 0, 16, 16)).(*ebiten.Image), &opts)
+	screen.DrawImage(
+		g.player.Img.SubImage(
+			image.Rect(0, 0, 16, 16),
+		).(*ebiten.Image),
+		&opts,
+	)
+
+	opts.GeoM.Reset()
+
+	for _, sprite := range g.sprites {
+		opts.GeoM.Translate(sprite.X, sprite.Y)
+
+		screen.DrawImage(
+			sprite.Img.SubImage(
+				image.Rect(0, 0, 16, 16),
+			).(*ebiten.Image),
+			&opts,
+		)
+
+		opts.GeoM.Reset()
+	}
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
@@ -61,7 +82,33 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err := ebiten.RunGame(&Game{player: &Sprite{Img: playerImg, X: 50, Y: 50}}); err != nil {
+
+	game := Game{
+		player: &Sprite{
+			Img: playerImg,
+			X:   50,
+			Y:   50,
+		},
+		sprites: []*Sprite{
+			{
+				Img: playerImg,
+				X:   100,
+				Y:   100,
+			},
+			{
+				Img: playerImg,
+				X:   150,
+				Y:   150,
+			},
+			{
+				Img: playerImg,
+				X:   75,
+				Y:   75,
+			},
+		},
+	}
+
+	if err := ebiten.RunGame(&game); err != nil {
 		log.Fatal(err)
 	}
 }
