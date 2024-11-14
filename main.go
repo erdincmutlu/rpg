@@ -11,9 +11,10 @@ import (
 )
 
 type Sprite struct {
-	Img *ebiten.Image
-	X   float64
-	Y   float64
+	Img           *ebiten.Image
+	X             float64
+	Y             float64
+	FollowsPlayer bool
 }
 
 type Game struct {
@@ -34,6 +35,23 @@ func (g *Game) Update() error {
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyDown) {
 		g.player.Y += 2
+	}
+
+	for _, sprite := range g.sprites {
+		if sprite.FollowsPlayer {
+			if sprite.X < g.player.X {
+				sprite.X += 1
+			}
+			if sprite.X > g.player.X {
+				sprite.X -= 1
+			}
+			if sprite.Y < g.player.Y {
+				sprite.Y += 1
+			}
+			if sprite.Y > g.player.Y {
+				sprite.Y -= 1
+			}
+		}
 	}
 
 	return nil
@@ -96,19 +114,22 @@ func main() {
 		},
 		sprites: []*Sprite{
 			{
-				Img: skeletonImg,
-				X:   100,
-				Y:   100,
+				Img:           skeletonImg,
+				X:             100,
+				Y:             100,
+				FollowsPlayer: true,
 			},
 			{
-				Img: skeletonImg,
-				X:   150,
-				Y:   150,
+				Img:           skeletonImg,
+				X:             150,
+				Y:             150,
+				FollowsPlayer: true,
 			},
 			{
-				Img: skeletonImg,
-				X:   75,
-				Y:   75,
+				Img:           skeletonImg,
+				X:             75,
+				Y:             75,
+				FollowsPlayer: false,
 			},
 		},
 	}
