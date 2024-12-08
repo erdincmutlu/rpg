@@ -24,4 +24,7 @@ func (c *Camera) FollowTarget(targetX float64, targetY float64, screenWidth floa
 func (c *Camera) Constrain(tilemapWidthPixels, tilemapHeightPixels, screenWidth, screenHeight float64) {
 	c.X = math.Min(c.X, 0.0)
 	c.Y = math.Min(c.Y, 0.0)
+
+	c.X = math.Max(c.X, screenWidth-tilemapWidthPixels)
+	c.Y = math.Max(c.Y, screenHeight-tilemapHeightPixels)
 }
