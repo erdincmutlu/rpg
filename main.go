@@ -60,7 +60,13 @@ func (g *Game) Update() error {
 		}
 	}
 
-	g.cam.FollowCamera(g.player.X+8, g.player.Y+8, 320, 240)
+	g.cam.FollowTarget(g.player.X+8, g.player.Y+8, 320, 240)
+	g.cam.Constrain(
+		float64(g.tilemapJSON.Layers[0].Width)*16.0,
+		float64(g.tilemapJSON.Layers[0].Height)*16.0,
+		320,
+		240,
+	)
 
 	return nil
 }
